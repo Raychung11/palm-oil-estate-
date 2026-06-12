@@ -124,16 +124,50 @@ function fmt_datetime(?string $value, string $format = 'd M Y, h:i A'): string
 }
 
 /**
+ * Format a numeric value for display, or a dash when null/empty.
+ */
+function num($value, int $decimals = 2): string
+{
+    if ($value === null || $value === '') {
+        return '—';
+    }
+    return number_format((float)$value, $decimals);
+}
+
+/**
+ * Normalise a form field to a decimal value or null (for nullable columns).
+ */
+function to_decimal_or_null($value): ?float
+{
+    $value = trim((string)$value);
+    return $value === '' ? null : (float)$value;
+}
+
+/**
+ * Normalise a form field to an int value or null (for nullable columns).
+ */
+function to_int_or_null($value): ?int
+{
+    $value = trim((string)$value);
+    return $value === '' ? null : (int)$value;
+}
+
+/**
  * Render a small Bootstrap status badge.
  */
 function status_badge(string $status): string
 {
     $map = [
-        'active'   => 'success',
-        'inactive' => 'secondary',
-        'pending'  => 'warning',
-        'approved' => 'success',
-        'rejected' => 'danger',
+        'active'    => 'success',
+        'inactive'  => 'secondary',
+        'pending'   => 'warning',
+        'approved'  => 'success',
+        'rejected'  => 'danger',
+        // Block / GIS status colours (blueprint Section 14).
+        'normal'    => 'success',
+        'attention' => 'warning',
+        'critical'  => 'danger',
+        'scheduled' => 'primary',
     ];
     $color = $map[strtolower($status)] ?? 'secondary';
     return '<span class="badge bg-' . $color . '">' . e(ucfirst($status)) . '</span>';

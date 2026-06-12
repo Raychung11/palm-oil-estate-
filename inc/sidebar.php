@@ -50,7 +50,15 @@ $is = function (string $needle) use ($current): string {
             <?php endif; ?>
 
             <li class="nav-section">Operations</li>
-            <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-geo-alt"></i> Estate Setup <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
+
+            <?php if (can('estate.view')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/estate/') ?>" href="<?= e(url('modules/estate/index.php')) ?>">
+                    <i class="bi bi-geo-alt"></i> Estate Setup
+                </a>
+            </li>
+            <?php endif; ?>
+
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-basket"></i> Harvest &amp; FFB <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-person-badge"></i> Workers <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-box-seam"></i> Inventory <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
