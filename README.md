@@ -4,20 +4,21 @@ Native PHP 8 + MySQL/MariaDB management system for a 1,000+ acre palm oil
 estate, built to run on **Hostinger shared hosting** (no Laravel, no Node.js
 runtime, no build step). Front-end uses Bootstrap 5 via CDN.
 
-This repository currently implements **Phase 1 — System Foundation**:
+This repository implements the full blueprint, built in phases:
 
-- Session-based login / logout with `password_hash()` + `password_verify()`
-- Role-based permission checks (`can()` / `require_permission()`)
-- CSRF protection on every POST form
-- XSS-safe output via `e()` (`htmlspecialchars`)
-- Activity / audit logging
-- Admin dashboard shell with responsive sidebar
-- Users module (list, create, edit) — searchable + paginated
-- Roles module with a permission matrix
+1. **System Foundation** — session auth, roles & permission matrix, audit log, dashboard
+2. **Estate Master** — estates → divisions → blocks → plots, GPS, status
+3. **Harvest & FFB** — daily entry, team & photos, supervisor approval, daily/monthly reports
+4. **Workers & Attendance** — profiles, documents, attendance register, permit/contract expiry alerts
+5. **Field Tasks** — assignment, start/complete/approve workflow, proof photos, completion report
+6. **Fertilizer & Chemical** — product masters, stock movements, applications & spraying (PPE/weather), reports
+7. **Inventory, Asset & Fuel** — item master & valuation, vehicle/machinery maintenance & reminders, fuel control with abnormal-usage alerts
+8. **Mill Delivery** — trips, weighbridge tickets, gross/tare/net, price/OER, harvest reconciliation
+9. **Costing & Reports** — costing dashboard (cost/tonne, cost/acre, profit by block/division), CSV & print-to-PDF export
+10. **AI Assistant** — rule-based query assistant and monthly insight generation, with the blueprint's AI safety rules
 
-Later phases (estate setup, harvest, workers, inventory, fuel, mill delivery,
-costing, compliance, GIS, AI assistant) follow the development plan in the
-blueprint.
+Cross-cutting: every POST form carries a CSRF token, all output is escaped with
+`e()`, queries use PDO prepared statements, and each module is permission-gated.
 
 ## Tech stack
 
@@ -51,11 +52,28 @@ estate-bos/
 ### 1. Create the database
 
 In hPanel → Databases → MySQL Databases, create a database and user, then
-import the SQL in order:
+import the SQL **in order** (base first, then each phase's schema, then the seeds):
 
 ```bash
-mysql -u <user> -p <database> < database/schema.sql
-mysql -u <user> -p <database> < database/seed.sql
+# Phase 1 base (required first)
+mysql -u <user> -p <db> < database/schema.sql
+mysql -u <user> -p <db> < database/seed.sql
+
+# Phase 2–10 schema
+for n in 2 3 4 5 6 7 8 9 10; do
+  mysql -u <user> -p <db> < database/schema_phase${n}.sql
+done
+
+# Phase 2–10 seeds (permissions + sample data)
+for n in 2 3 4 5 6 7 8 9 10; do
+  mysql -u <user> -p <db> < database/seed_phase${n}.sql
+done
+```
+
+A scheduled costing snapshot can be wired to Hostinger cron:
+
+```
+php /home/USER/public_html/estate-bos/cron/monthly_summary.php
 ```
 
 ### 2. Configure the connection

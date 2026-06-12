@@ -144,7 +144,13 @@ $is = function (string $needle) use ($current): string {
             </li>
             <?php endif; ?>
 
-            <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-robot"></i> AI Assistant <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
+            <?php if (can('ai.use')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/ai/') ?>" href="<?= e(url('modules/ai/index.php')) ?>">
+                    <i class="bi bi-robot"></i> AI Assistant
+                </a>
+            </li>
+            <?php endif; ?>
         </ul>
     </nav>
 </aside>

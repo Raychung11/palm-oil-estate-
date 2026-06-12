@@ -65,4 +65,8 @@ return [
         'costing.view'   => 'View costing dashboard',
         'costing.manage' => 'Manage cost & revenue entries',
     ],
+    'AI Assistant' => [
+        'ai.use'    => 'Ask the AI estate assistant',
+        'ai.manage' => 'Generate AI insights / summaries',
+    ],
 ];

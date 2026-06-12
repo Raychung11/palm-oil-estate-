@@ -28,6 +28,13 @@ define('PER_PAGE', 15);
 // Timezone
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
+// AI assistant — Phase 1 is rule-based (offline). Set AI_API_ENABLED to true
+// and provide a key to enable an optional LLM provider (Phase 2). Even when
+// enabled, the assistant only answers from system data per the safety rules.
+define('AI_API_ENABLED', false);
+define('AI_API_PROVIDER', 'claude'); // 'claude' | 'openai'
+define('AI_API_KEY', '');
+
 // Error reporting — turn display off in production on Hostinger
 define('APP_DEBUG', false);
 if (APP_DEBUG) {
