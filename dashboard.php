@@ -36,14 +36,23 @@ try {
     // Tables not yet present — leave the placeholder dashes.
 }
 
-// KPI cards from the blueprint (Section 11). Remaining values arrive in later phases.
+$lowStock = $vehiclesDue = '—';
+try {
+    $soon = date('Y-m-d', strtotime('+30 days'));
+    $lowStock = (string)(int)$pdo->query("SELECT COUNT(*) FROM inventory_items WHERE status = 'active' AND current_stock <= minimum_stock")->fetchColumn();
+    $vehiclesDue = (string)(int)$pdo->query("SELECT COUNT(*) FROM assets WHERE status = 'active' AND ((road_tax_expiry IS NOT NULL AND road_tax_expiry <= '$soon') OR (insurance_expiry IS NOT NULL AND insurance_expiry <= '$soon'))")->fetchColumn();
+} catch (Throwable $e) {
+    // Assets/inventory tables not yet present.
+}
+
+// KPI cards from the blueprint (Section 11).
 $kpis = [
     ['label' => 'Today FFB (kg)',        'value' => $todayFfb,        'icon' => 'bi-basket',       'color' => 'success'],
     ['label' => 'Month-to-Date FFB (t)', 'value' => $mtdFfb,          'icon' => 'bi-graph-up',     'color' => 'primary'],
-    ['label' => 'Active Workers',        'value' => $activeWorkers,   'icon' => 'bi-person-badge', 'color' => 'info'],
-    ['label' => 'Today Attendance',      'value' => $todayAttendance, 'icon' => 'bi-calendar-check','color' => 'success'],
+    ['label' => 'Today Attendance',      'value' => $todayAttendance, 'icon' => 'bi-calendar-check','color' => 'info'],
     ['label' => 'Pending Approvals',     'value' => $pendingApprovals,'icon' => 'bi-hourglass',    'color' => 'warning'],
-    ['label' => 'Permits Expiring (30d)','value' => $expiringPermits, 'icon' => 'bi-exclamation-triangle', 'color' => 'danger'],
+    ['label' => 'Low Stock Items',       'value' => $lowStock,        'icon' => 'bi-box-seam',     'color' => 'danger'],
+    ['label' => 'Vehicles Due (30d)',    'value' => $vehiclesDue,     'icon' => 'bi-truck',        'color' => 'secondary'],
 ];
 
 $page_title = 'Dashboard';

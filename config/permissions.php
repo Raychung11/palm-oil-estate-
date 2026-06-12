@@ -47,7 +47,11 @@ return [
     ],
     'Inventory' => [
         'inventory.view'    => 'View inventory',
-        'inventory.approve' => 'Approve inventory movements',
+        'inventory.approve' => 'Manage / approve inventory movements',
+    ],
+    'Assets & Fuel' => [
+        'asset.view'   => 'View assets & fuel',
+        'asset.manage' => 'Manage assets, maintenance & fuel',
     ],
     'Reports' => [
         'report.view'   => 'View reports',
