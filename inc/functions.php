@@ -153,6 +153,62 @@ function to_int_or_null($value): ?int
 }
 
 /**
+ * Convert a kilogram value to tonnes for display.
+ */
+function kg_to_tonnes($kg, int $decimals = 2): string
+{
+    if ($kg === null || $kg === '') {
+        return '—';
+    }
+    return number_format((float)$kg / 1000, $decimals);
+}
+
+/**
+ * Handle a single uploaded file safely.
+ *
+ * Validates the upload, checks size and extension against a whitelist,
+ * moves it into UPLOAD_PATH/$subdir and returns the stored relative path
+ * (e.g. 'harvest/abc123.jpg'). Returns null when no file was provided.
+ * Throws RuntimeException on a genuine validation failure.
+ *
+ * @param array  $file        A single $_FILES entry
+ * @param string $subdir      Sub-folder under uploads/ (e.g. 'harvest')
+ * @param array  $allowedExt  Lowercase extensions without the dot
+ * @param int    $maxBytes    Maximum allowed size
+ */
+function handle_upload(array $file, string $subdir, array $allowedExt = ['jpg','jpeg','png','webp','pdf'], int $maxBytes = 5242880): ?string
+{
+    // No file selected is not an error — the field is optional.
+    if (!isset($file['error']) || $file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('File upload failed. Please try again.');
+    }
+    if ($file['size'] > $maxBytes) {
+        throw new RuntimeException('File is too large (max ' . round($maxBytes / 1048576) . ' MB).');
+    }
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowedExt, true)) {
+        throw new RuntimeException('File type not allowed. Allowed: ' . implode(', ', $allowedExt) . '.');
+    }
+
+    $dir = UPLOAD_PATH . '/' . $subdir;
+    if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+        throw new RuntimeException('Could not create the upload folder.');
+    }
+
+    $name = bin2hex(random_bytes(16)) . '.' . $ext;
+    $dest = $dir . '/' . $name;
+    if (!move_uploaded_file($file['tmp_name'], $dest)) {
+        throw new RuntimeException('Could not save the uploaded file.');
+    }
+
+    return $subdir . '/' . $name;
+}
+
+/**
  * Render a small Bootstrap status badge.
  */
 function status_badge(string $status): string

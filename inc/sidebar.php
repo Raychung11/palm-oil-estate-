@@ -59,7 +59,13 @@ $is = function (string $needle) use ($current): string {
             </li>
             <?php endif; ?>
 
-            <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-basket"></i> Harvest &amp; FFB <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
+            <?php if (can('harvest.view')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/harvest/') ?>" href="<?= e(url('modules/harvest/index.php')) ?>">
+                    <i class="bi bi-basket"></i> Harvest &amp; FFB
+                </a>
+            </li>
+            <?php endif; ?>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-person-badge"></i> Workers <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-box-seam"></i> Inventory <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-truck"></i> Mill Delivery <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
