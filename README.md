@@ -52,7 +52,18 @@ estate-bos/
 ### 1. Create the database
 
 In hPanel → Databases → MySQL Databases, create a database and user, then
-import the SQL **in order** (base first, then each phase's schema, then the seeds):
+import the SQL.
+
+**Easiest — two files:** in phpMyAdmin, select your database and import
+`database/install_all.sql` (creates every table, all phases) then
+`database/seed_all.sql` (roles, permissions, Super Admin, sample questions).
+
+> Always import `install_all.sql` **before** `seed_all.sql`. The seed only
+> fills tables with data — if the tables don't exist yet you'll get
+> `#1146 ... table doesn't exist`.
+
+**Or per-phase** — import the SQL **in order** (base first, then each phase's
+schema, then the seeds):
 
 ```bash
 # Phase 1 base (required first)
