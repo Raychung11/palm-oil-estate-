@@ -31,6 +31,12 @@ return [
         'worker.view'   => 'View workers',
         'worker.manage' => 'Manage workers',
     ],
+    'Tasks' => [
+        'task.view'    => 'View field tasks',
+        'task.create'  => 'Create / edit field tasks',
+        'task.manage'  => 'Start / complete tasks',
+        'task.approve' => 'Approve / reject tasks',
+    ],
     'Inventory' => [
         'inventory.view'    => 'View inventory',
         'inventory.approve' => 'Approve inventory movements',
