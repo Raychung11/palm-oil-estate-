@@ -53,6 +53,10 @@ return [
         'asset.view'   => 'View assets & fuel',
         'asset.manage' => 'Manage assets, maintenance & fuel',
     ],
+    'Mill Delivery' => [
+        'mill.view'   => 'View mill deliveries',
+        'mill.manage' => 'Manage mill deliveries',
+    ],
     'Reports' => [
         'report.view'   => 'View reports',
         'report.export' => 'Export reports',

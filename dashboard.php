@@ -36,13 +36,21 @@ try {
     // Tables not yet present — leave the placeholder dashes.
 }
 
-$lowStock = $vehiclesDue = '—';
+$lowStock = $vehiclesDue = $millMtd = $revenueMtd = '—';
 try {
     $soon = date('Y-m-d', strtotime('+30 days'));
     $lowStock = (string)(int)$pdo->query("SELECT COUNT(*) FROM inventory_items WHERE status = 'active' AND current_stock <= minimum_stock")->fetchColumn();
     $vehiclesDue = (string)(int)$pdo->query("SELECT COUNT(*) FROM assets WHERE status = 'active' AND ((road_tax_expiry IS NOT NULL AND road_tax_expiry <= '$soon') OR (insurance_expiry IS NOT NULL AND insurance_expiry <= '$soon'))")->fetchColumn();
 } catch (Throwable $e) {
     // Assets/inventory tables not yet present.
+}
+try {
+    $monthStart = date('Y-m-01');
+    $today = date('Y-m-d');
+    $millMtd    = kg_to_tonnes($pdo->query("SELECT COALESCE(SUM(net_weight_kg),0) FROM mill_deliveries WHERE delivery_date BETWEEN '$monthStart' AND '$today'")->fetchColumn());
+    $revenueMtd = num($pdo->query("SELECT COALESCE(SUM(total_value),0) FROM mill_deliveries WHERE delivery_date BETWEEN '$monthStart' AND '$today'")->fetchColumn());
+} catch (Throwable $e) {
+    // Mill tables not yet present.
 }
 
 // KPI cards from the blueprint (Section 11).
@@ -53,6 +61,8 @@ $kpis = [
     ['label' => 'Pending Approvals',     'value' => $pendingApprovals,'icon' => 'bi-hourglass',    'color' => 'warning'],
     ['label' => 'Low Stock Items',       'value' => $lowStock,        'icon' => 'bi-box-seam',     'color' => 'danger'],
     ['label' => 'Vehicles Due (30d)',    'value' => $vehiclesDue,     'icon' => 'bi-truck',        'color' => 'secondary'],
+    ['label' => 'Mill Delivery MTD (t)', 'value' => $millMtd,         'icon' => 'bi-truck-front',  'color' => 'primary'],
+    ['label' => 'Est. Revenue MTD (RM)', 'value' => $revenueMtd,      'icon' => 'bi-cash-stack',   'color' => 'success'],
 ];
 
 $page_title = 'Dashboard';
