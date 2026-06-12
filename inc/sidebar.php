@@ -66,7 +66,13 @@ $is = function (string $needle) use ($current): string {
                 </a>
             </li>
             <?php endif; ?>
-            <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-person-badge"></i> Workers <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
+            <?php if (can('worker.view')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/workers/') ?>" href="<?= e(url('modules/workers/index.php')) ?>">
+                    <i class="bi bi-person-badge"></i> Workers
+                </a>
+            </li>
+            <?php endif; ?>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-box-seam"></i> Inventory <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-truck"></i> Mill Delivery <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
 

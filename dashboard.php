@@ -21,7 +21,7 @@ $recent = $pdo->query(
 
 // Harvest KPIs — computed defensively so the dashboard still works
 // before the Phase 3 tables have been imported.
-$todayFfb = $mtdFfb = $pendingApprovals = $activeWorkers = '—';
+$todayFfb = $mtdFfb = $pendingApprovals = $activeWorkers = $todayAttendance = $expiringPermits = '—';
 try {
     $today = date('Y-m-d');
     $monthStart = date('Y-m-01');
@@ -29,18 +29,21 @@ try {
     $mtdFfb   = kg_to_tonnes($pdo->query("SELECT COALESCE(SUM(ffb_weight_kg),0) FROM harvest_records WHERE harvest_date BETWEEN '$monthStart' AND '$today'")->fetchColumn());
     $pendingApprovals = (string)(int)$pdo->query("SELECT COUNT(*) FROM harvest_records WHERE approval_status = 'pending'")->fetchColumn();
     $activeWorkers = (string)(int)$pdo->query("SELECT COUNT(*) FROM workers WHERE status = 'active'")->fetchColumn();
+    $todayAttendance = (string)(int)$pdo->query("SELECT COUNT(*) FROM worker_attendance WHERE attendance_date = '$today' AND status = 'present'")->fetchColumn();
+    $soon = date('Y-m-d', strtotime('+30 days'));
+    $expiringPermits = (string)(int)$pdo->query("SELECT COUNT(*) FROM workers WHERE status = 'active' AND permit_expiry IS NOT NULL AND permit_expiry <= '$soon'")->fetchColumn();
 } catch (Throwable $e) {
     // Tables not yet present — leave the placeholder dashes.
 }
 
 // KPI cards from the blueprint (Section 11). Remaining values arrive in later phases.
 $kpis = [
-    ['label' => 'Today FFB (kg)',        'value' => $todayFfb,        'icon' => 'bi-basket',      'color' => 'success'],
-    ['label' => 'Month-to-Date FFB (t)', 'value' => $mtdFfb,          'icon' => 'bi-graph-up',    'color' => 'primary'],
+    ['label' => 'Today FFB (kg)',        'value' => $todayFfb,        'icon' => 'bi-basket',       'color' => 'success'],
+    ['label' => 'Month-to-Date FFB (t)', 'value' => $mtdFfb,          'icon' => 'bi-graph-up',     'color' => 'primary'],
     ['label' => 'Active Workers',        'value' => $activeWorkers,   'icon' => 'bi-person-badge', 'color' => 'info'],
-    ['label' => 'Pending Approvals',     'value' => $pendingApprovals,'icon' => 'bi-hourglass',   'color' => 'warning'],
-    ['label' => 'Low Stock Items',       'value' => '—',              'icon' => 'bi-box-seam',    'color' => 'danger'],
-    ['label' => 'Vehicles Due Service',  'value' => '—',              'icon' => 'bi-truck',       'color' => 'secondary'],
+    ['label' => 'Today Attendance',      'value' => $todayAttendance, 'icon' => 'bi-calendar-check','color' => 'success'],
+    ['label' => 'Pending Approvals',     'value' => $pendingApprovals,'icon' => 'bi-hourglass',    'color' => 'warning'],
+    ['label' => 'Permits Expiring (30d)','value' => $expiringPermits, 'icon' => 'bi-exclamation-triangle', 'color' => 'danger'],
 ];
 
 $page_title = 'Dashboard';

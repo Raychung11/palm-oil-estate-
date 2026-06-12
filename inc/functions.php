@@ -209,6 +209,29 @@ function handle_upload(array $file, string $subdir, array $allowedExt = ['jpg','
 }
 
 /**
+ * Render an expiry badge for a date (permits, contracts, documents).
+ * Red when expired, amber when within $warnDays, green otherwise.
+ * Returns a muted dash when no date is supplied.
+ */
+function expiry_badge(?string $date, int $warnDays = 30): string
+{
+    if (empty($date) || !strtotime($date)) {
+        return '<span class="text-muted">—</span>';
+    }
+    $ts = strtotime($date);
+    $days = (int)floor(($ts - strtotime('today')) / 86400);
+    $label = date('d M Y', $ts);
+
+    if ($days < 0) {
+        return '<span class="badge bg-danger" title="Expired ' . abs($days) . ' day(s) ago">' . e($label) . '</span>';
+    }
+    if ($days <= $warnDays) {
+        return '<span class="badge bg-warning text-dark" title="Expires in ' . $days . ' day(s)">' . e($label) . '</span>';
+    }
+    return '<span class="badge bg-light text-dark">' . e($label) . '</span>';
+}
+
+/**
  * Render a small Bootstrap status badge.
  */
 function status_badge(string $status): string
