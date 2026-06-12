@@ -9,9 +9,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('costing.manage', 'costing', 'Manage cost & revenue entries')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted.
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('costing.view', 'costing.manage')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager & Assistant Manager: full costing + reports.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)

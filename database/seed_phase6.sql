@@ -10,9 +10,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('chemical.manage',   'chemical',   'Manage chemical stock & spraying')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted.
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('fertilizer.view', 'fertilizer.manage', 'chemical.view', 'chemical.manage')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager, Assistant Manager, Storekeeper: full management.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)

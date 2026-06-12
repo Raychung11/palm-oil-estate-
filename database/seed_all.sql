@@ -178,9 +178,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('task.approve', 'tasks', 'Approve / reject tasks')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted (covers the new keys too).
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('task.view', 'task.create', 'task.manage', 'task.approve')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager & Assistant Manager: full task workflow.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
@@ -224,9 +227,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('chemical.manage',   'chemical',   'Manage chemical stock & spraying')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted.
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('fertilizer.view', 'fertilizer.manage', 'chemical.view', 'chemical.manage')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager, Assistant Manager, Storekeeper: full management.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
@@ -262,9 +268,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('asset.manage', 'asset', 'Manage assets, maintenance & fuel')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted.
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('asset.view', 'asset.manage')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager & Assistant Manager: full inventory + asset/fuel.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
@@ -306,9 +315,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('mill.manage', 'mill', 'Manage mill deliveries')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted.
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('mill.view', 'mill.manage')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager, Assistant Manager, Supervisor: full delivery management.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
@@ -337,9 +349,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('costing.manage', 'costing', 'Manage cost & revenue entries')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted.
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('costing.view', 'costing.manage')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager & Assistant Manager: full costing + reports.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
@@ -374,9 +389,12 @@ INSERT INTO permissions (permission_key, permission_group, description) VALUES
   ('ai.manage', 'ai', 'Generate AI insights / summaries')
 ON DUPLICATE KEY UPDATE permission_group = VALUES(permission_group);
 
--- Keep Super Admin fully granted.
+-- Grant the new permissions to Super Admin.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id FROM roles r CROSS JOIN permissions p WHERE r.role_slug = 'super_admin';
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.permission_key IN ('ai.use', 'ai.manage')
+WHERE r.role_slug = 'super_admin';
 
 -- Estate Manager & Assistant Manager: full AI access.
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
