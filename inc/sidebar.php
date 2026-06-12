@@ -81,6 +81,22 @@ $is = function (string $needle) use ($current): string {
                 </a>
             </li>
             <?php endif; ?>
+            <?php if (can('fertilizer.view')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/fertilizer/') ?>" href="<?= e(url('modules/fertilizer/products.php')) ?>">
+                    <i class="bi bi-droplet-half"></i> Fertilizer
+                </a>
+            </li>
+            <?php endif; ?>
+
+            <?php if (can('chemical.view')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/chemicals/') ?>" href="<?= e(url('modules/chemicals/products.php')) ?>">
+                    <i class="bi bi-bug"></i> Chemical &amp; Spraying
+                </a>
+            </li>
+            <?php endif; ?>
+
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-box-seam"></i> Inventory <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-truck"></i> Mill Delivery <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
 

@@ -37,6 +37,14 @@ return [
         'task.manage'  => 'Start / complete tasks',
         'task.approve' => 'Approve / reject tasks',
     ],
+    'Fertilizer' => [
+        'fertilizer.view'   => 'View fertilizer',
+        'fertilizer.manage' => 'Manage fertilizer stock & applications',
+    ],
+    'Chemical' => [
+        'chemical.view'   => 'View chemicals',
+        'chemical.manage' => 'Manage chemical stock & spraying',
+    ],
     'Inventory' => [
         'inventory.view'    => 'View inventory',
         'inventory.approve' => 'Approve inventory movements',
