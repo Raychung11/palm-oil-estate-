@@ -232,6 +232,30 @@ function expiry_badge(?string $date, int $warnDays = 30): string
 }
 
 /**
+ * Stream an array of rows as a CSV download and stop execution.
+ * Opens cleanly in Excel / LibreOffice — no PhpSpreadsheet dependency.
+ *
+ * @param string   $filename  Download filename (without extension)
+ * @param string[] $headers   Column headers
+ * @param array[]  $rows      Each row an ordered array of cell values
+ */
+function send_csv(string $filename, array $headers, array $rows): void
+{
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '.csv"');
+    header('Pragma: no-cache');
+    $out = fopen('php://output', 'w');
+    // UTF-8 BOM so Excel renders accents correctly.
+    fwrite($out, "\xEF\xBB\xBF");
+    fputcsv($out, $headers);
+    foreach ($rows as $row) {
+        fputcsv($out, $row);
+    }
+    fclose($out);
+    exit;
+}
+
+/**
  * Render a small Bootstrap status badge.
  */
 function status_badge(string $status): string

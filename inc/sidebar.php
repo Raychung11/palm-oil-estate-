@@ -127,7 +127,23 @@ $is = function (string $needle) use ($current): string {
             <?php endif; ?>
 
             <li class="nav-section">Insight</li>
-            <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-graph-up"></i> Costing <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
+
+            <?php if (can('costing.view')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/costing/') ?>" href="<?= e(url('modules/costing/index.php')) ?>">
+                    <i class="bi bi-graph-up"></i> Costing
+                </a>
+            </li>
+            <?php endif; ?>
+
+            <?php if (can('report.view')): ?>
+            <li class="nav-item">
+                <a class="nav-link<?= $is('/reports/') ?>" href="<?= e(url('reports/worker_productivity.php')) ?>">
+                    <i class="bi bi-clipboard-data"></i> Reports
+                </a>
+            </li>
+            <?php endif; ?>
+
             <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-robot"></i> AI Assistant <span class="badge bg-light text-muted ms-1">Soon</span></span></li>
         </ul>
     </nav>

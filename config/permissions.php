@@ -61,4 +61,8 @@ return [
         'report.view'   => 'View reports',
         'report.export' => 'Export reports',
     ],
+    'Costing' => [
+        'costing.view'   => 'View costing dashboard',
+        'costing.manage' => 'Manage cost & revenue entries',
+    ],
 ];
