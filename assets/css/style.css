@@ -1,0 +1,150 @@
+/* Estate BOS — admin layout styles
+   A lightweight responsive shell built on top of Bootstrap 5. */
+
+:root {
+    --sidebar-width: 250px;
+    --brand-green: #1b5e20;
+    --brand-green-light: #2e7d32;
+}
+
+body {
+    background: #f4f6f8;
+    font-size: 0.925rem;
+}
+
+/* ---------- Layout shell ---------- */
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid #e5e9ed;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 1040;
+    transition: transform 0.2s ease;
+}
+
+.app-main {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.app-content {
+    flex: 1;
+}
+
+/* ---------- Sidebar brand ---------- */
+.sidebar-brand a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: inherit;
+}
+.brand-mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: var(--brand-green);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+.brand-text strong { color: var(--brand-green); font-size: 1rem; }
+.brand-text small { font-size: 0.65rem; line-height: 1.1; }
+
+/* ---------- Sidebar nav ---------- */
+.sidebar-nav { padding: 0.5rem 0 2rem; }
+.nav-section {
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    color: #9aa5b1;
+    padding: 0.9rem 1.25rem 0.35rem;
+}
+.app-sidebar .nav-link {
+    color: #3e4c59;
+    padding: 0.55rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border-left: 3px solid transparent;
+}
+.app-sidebar .nav-link:hover {
+    background: #f1f5f9;
+    color: var(--brand-green);
+}
+.app-sidebar .nav-link.active {
+    background: #e8f5e9;
+    color: var(--brand-green);
+    border-left-color: var(--brand-green);
+    font-weight: 600;
+}
+.app-sidebar .nav-link.disabled { color: #b0b8c1; }
+.app-sidebar .nav-link i { width: 1.1rem; text-align: center; }
+
+/* ---------- Sidebar mobile ---------- */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1035;
+}
+
+@media (max-width: 991.98px) {
+    .app-sidebar { transform: translateX(-100%); }
+    .app-sidebar.show { transform: translateX(0); }
+    .app-main { margin-left: 0; }
+    .sidebar-backdrop.show { display: block; }
+}
+
+/* ---------- KPI cards ---------- */
+.kpi-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(16,24,40,0.08);
+}
+.kpi-card .kpi-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+.kpi-card .kpi-value { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+.kpi-card .kpi-label { font-size: 0.78rem; color: #6b7280; }
+
+/* ---------- Cards & tables ---------- */
+.card { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(16,24,40,0.06); }
+.table > :not(caption) > * > * { padding: 0.6rem 0.75rem; }
+.table thead th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: #6b7280; }
+
+/* ---------- Auth page ---------- */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1b5e20, #2e7d32);
+    padding: 1rem;
+}
+.auth-card {
+    width: 100%;
+    max-width: 410px;
+    border-radius: 14px;
+}

@@ -1,0 +1,13 @@
+# Uploaded files (keep folder structure, ignore contents)
+uploads/**/*
+!uploads/**/.htaccess
+!uploads/**/.gitkeep
+
+# Local config overrides
+config/db.local.php
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log
+vendor/
